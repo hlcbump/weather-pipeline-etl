@@ -35,6 +35,6 @@ def pipeline():
     except Exception as e:
         logging.error(f"❌ ERRO no Pipeline: {e}")
         import traceback
-        traceback.print_exc
+        traceback.print_exc()
 
 pipeline()
