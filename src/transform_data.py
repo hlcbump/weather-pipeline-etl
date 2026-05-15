@@ -5,7 +5,7 @@ import json
 import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-path_name = Path(__file__).parent.parent / 'data' / 'weather_data.json'
+default_path = Path(__file__).parent.parent / 'data' / 'weather_data.json'
 columns_name_to_drop = ['weather', 'weather_icon']
 columns_names_to_rename = {
         "base": "base",
@@ -28,7 +28,8 @@ columns_names_to_rename = {
         "wind.speed": "wind_speed",
         "wind.deg": "wind_deg",
         "wind.gust": "wind_gust",
-        "clouds.all": "clouds", 
+        "rain.1h": "rain_1h",
+        "clouds.all": "clouds",
         "sys.type": "sys_type",                 
         "sys.id": "sys_id",                
         "sys.country": "country",                
@@ -87,7 +88,11 @@ def normalize_datetime_columns(df: pd.DataFrame, columns_names: list[str]) -> pd
     logging.info("✓ Colunas convertidas para datetime\n")
     return df
 
-def data_transformation():
+def data_transformation(path_name=None):
+    if path_name is None:
+        path_name = default_path
+    else:
+        path_name = Path(path_name)
     print("\nIniciando Transformações.")
     df = create_dataframe(path_name)
     df = normalize_weather_columns(df)

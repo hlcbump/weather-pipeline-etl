@@ -20,10 +20,10 @@ table_name = 'sp_weather'
 def pipeline():
     try:
         logging.info("ETAPA 1: EXTRACT")
-        extract_weather_data(url)
+        data, json_path = extract_weather_data(url)
 
         logging.info("ETAPA 2: TRANSFORM")
-        df = data_transformation()
+        df = data_transformation(json_path)
 
         logging.info("ETAPA 3: LOAD")
         load_weather_data(table_name, df)

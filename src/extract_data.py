@@ -1,6 +1,7 @@
 import requests
 import json
 from pathlib import Path
+from datetime import datetime
 import logging
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -17,7 +18,8 @@ def extract_weather_data(url:str) -> list:
         logging.warning("Nenhum dado retornado")
         return []
 
-    output_path = 'data/weather_data.json'
+    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+    output_path = f'data/weather_data_{timestamp}.json'
     output_dir = Path(output_path).parent
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -26,4 +28,4 @@ def extract_weather_data(url:str) -> list:
 
 
     logging.info(f"Arquivo salvo em: {output_path}")
-    return data
+    return data, output_path

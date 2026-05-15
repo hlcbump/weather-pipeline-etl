@@ -35,11 +35,12 @@ def weather_pipeline():
 
     @task
     def extract():
-        extract_weather_data(url)
+        data, json_path = extract_weather_data(url)
+        return json_path
 
     @task
-    def transform():
-        df = data_transformation()
+    def transform(json_path: str):
+        df = data_transformation(json_path)
         df.to_parquet('/opt/airflow/data/temp_data.parquet', index=False)
 
     @task
@@ -48,7 +49,7 @@ def weather_pipeline():
         df = pd.read_parquet('/opt/airflow/data/temp_data.parquet')
         load_weather_data('sp_weather', df)
 
-
-    extract() >> transform() >> load()
+    json_path = extract()
+    transform(json_path) >> load()
 
 weather_pipeline()
